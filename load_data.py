@@ -4,7 +4,7 @@ import pandas as pd
 DATA_PATH = r"C:\Users\mrohi_omcrt8h\Documents\2nd year\SEM - 4\ML\placement_predict_50k Dataset (3) 1(in).csv"
 
 
-def load_data(path: str) -> pd.DataFrame:
+def load_data(path: str = DATA_PATH) -> pd.DataFrame:
     if not os.path.exists(path):
         raise FileNotFoundError(f"File not found: {path}")
 

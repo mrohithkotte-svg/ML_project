@@ -1,100 +1,528 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Placement Prediction Project</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta charset="UTF-8">
+
+    <title>Placement Prediction Project</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
+
 <body>
 
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
 <header class="topbar">
+
     <h1>Placement Prediction Project</h1>
+
 </header>
 
+
+
 <div class="layout">
-    <!-- Left panel -->
+
+
+    <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+
     <nav class="sidebar">
+
         <ul>
+
+            <!-- DATA LOADING -->
+
             <li>
+
                 <a href="{{ url_for('data_loading') }}"
-                   class="menu-item {% if active == 'data-loading' %}active{% endif %}">
+                   class="menu-item
+                   {% if active == 'data-loading' %}
+                   active
+                   {% endif %}">
+
                     Data Loading
+
                 </a>
-            </li>
-            <li>
-                <a href="{{ url_for('eda') }}" class="menu-item {% if active == 'eda' %}active{% endif %}">EDA</a>
 
             </li>
-            <li class="menu-item disabled">Preprocessing (coming soon)</li>
-            <li class="menu-item disabled">Model Training (coming soon)</li>
-            <li class="menu-item disabled">Prediction (coming soon)</li>
+
+
+            <!-- EDA -->
+
+            <li>
+
+                <a href="{{ url_for('eda') }}"
+                   class="menu-item
+                   {% if active == 'eda' %}
+                   active
+                   {% endif %}">
+
+                    EDA
+
+                </a>
+
+            </li>
+
+
+            <!-- PREPROCESSING -->
+
+            <li>
+
+                <a href="{{ url_for('preprocessing') }}"
+                   class="menu-item
+                   {% if active == 'preprocessing' %}
+                   active
+                   {% endif %}">
+
+                    Preprocessing
+
+                </a>
+
+            </li>
+
+
+            <!-- MODEL TRAINING -->
+
+            <li>
+
+                <span class="menu-item disabled">
+
+                    Model Training (coming soon)
+
+                </span>
+
+            </li>
+
+
+            <!-- PREDICTION -->
+
+            <li>
+
+                <span class="menu-item disabled">
+
+                    Prediction (coming soon)
+
+                </span>
+
+            </li>
+
         </ul>
+
     </nav>
 
-    <!-- Main content -->
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
     <main class="content">
 
+
+        <!-- HOME -->
+
         {% if active == 'none' %}
-            <p>Select an option from the left panel to get started.</p>
+
+            <p>
+
+                Select an option from the left panel
+                to get started.
+
+            </p>
+
         {% endif %}
+
+
+
+        <!-- =================================================
+             DATA LOADING
+        ================================================== -->
 
         {% if active == 'data-loading' %}
+
             <h2>Data Loading</h2>
 
+
             {% if error %}
-                <div class="error">{{ error }}</div>
+
+                <div class="error">
+
+                    {{ error }}
+
+                </div>
+
             {% endif %}
+
+
 
             {% if summary %}
+
                 <table class="summary-table">
-                    <tr><td>Rows</td><td>{{ summary.n_rows }}</td></tr>
-                    <tr><td>Columns</td><td>{{ summary.n_cols }}</td></tr>
+
+                    <tr>
+
+                        <td>Rows</td>
+
+                        <td>
+                            {{ summary.n_rows }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Columns</td>
+
+                        <td>
+                            {{ summary.n_cols }}
+                        </td>
+
+                    </tr>
+
                 </table>
 
+
+
                 <h3>Column Info</h3>
+
+
                 <div class="table-wrapper">
+
                     <table class="data-table">
+
                         <thead>
-                            <tr><th>Column</th><th>Dtype</th><th>Missing Values</th></tr>
-                        </thead>
-                        <tbody>
-                        {% for col in summary.columns %}
+
                             <tr>
-                                <td>{{ col }}</td>
-                                <td>{{ summary.dtypes[col] }}</td>
-                                <td>{{ summary.missing_counts[col] }}</td>
+
+                                <th>Column</th>
+
+                                <th>Dtype</th>
+
+                                <th>Missing Values</th>
+
                             </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for col in summary.columns %}
+
+                            <tr>
+
+                                <td>
+                                    {{ col }}
+                                </td>
+
+                                <td>
+                                    {{ summary.dtypes[col] }}
+                                </td>
+
+                                <td>
+                                    {{ summary.missing_counts[col] }}
+                                </td>
+
+                            </tr>
+
                         {% endfor %}
+
                         </tbody>
+
                     </table>
+
                 </div>
+
+
 
                 <h3>Preview (first 10 rows)</h3>
+
+
                 <div class="table-wrapper">
+
                     <table class="data-table">
+
                         <thead>
+
                             <tr>
+
                             {% for col in summary.columns %}
-                                <th>{{ col }}</th>
+
+                                <th>
+                                    {{ col }}
+                                </th>
+
                             {% endfor %}
+
                             </tr>
+
                         </thead>
+
+
                         <tbody>
+
                         {% for row in summary.preview %}
+
                             <tr>
+
                             {% for col in summary.columns %}
-                                <td>{{ row[col] }}</td>
+
+                                <td>
+                                    {{ row[col] }}
+                                </td>
+
                             {% endfor %}
+
                             </tr>
+
                         {% endfor %}
+
                         </tbody>
+
                     </table>
+
                 </div>
+
             {% endif %}
+
         {% endif %}
 
+
+
+        <!-- =================================================
+             PREPROCESSING
+        ================================================== -->
+
+        {% if active == 'preprocessing' %}
+
+            <h2>Preprocessing</h2>
+
+
+            {% if error %}
+
+                <div class="error">
+
+                    {{ error }}
+
+                </div>
+
+            {% endif %}
+
+
+
+            {% if preprocessing %}
+
+                <div class="success">
+
+                    ✓ {{ preprocessing.status }}
+
+                </div>
+
+
+
+                <!-- DATASET INFORMATION -->
+
+                <h3>Dataset Information</h3>
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>Original Rows</td>
+
+                        <td>
+                            {{ preprocessing.original_rows }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Original Columns</td>
+
+                        <td>
+                            {{ preprocessing.original_columns }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+
+                <!-- DUPLICATES -->
+
+                <h3>Duplicate Handling</h3>
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>Duplicates Before</td>
+
+                        <td>
+                            {{ preprocessing.duplicate_before }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Duplicates After</td>
+
+                        <td>
+                            {{ preprocessing.duplicate_after }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+
+                <!-- MISSING VALUES -->
+
+                <h3>Missing Value Handling</h3>
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>Missing Values After Handling</td>
+
+                        <td>
+                            {{ preprocessing.missing_after }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+
+                <!-- FEATURES -->
+
+                <h3>Features Used for Machine Learning</h3>
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>Numerical Features</td>
+
+                        <td>
+                            {{ preprocessing.numerical_features }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Categorical Features</td>
+
+                        <td>
+                            {{ preprocessing.categorical_features }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+
+                <!-- TRAIN TEST -->
+
+                <h3>Train / Test Split</h3>
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>Training Samples</td>
+
+                        <td>
+                            {{ preprocessing.train_rows }}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Testing Samples</td>
+
+                        <td>
+                            {{ preprocessing.test_rows }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+
+                <!-- ENCODING AND SCALING -->
+
+                <h3>Encoding & Scaling</h3>
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>Features Before Processing</td>
+
+                        <td>
+                            27
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Features After Processing</td>
+
+                        <td>
+                            {{ preprocessing.train_features }}
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+
+                <!-- FINAL RESULT -->
+
+                <div class="success">
+
+                    ✓ Preprocessing completed successfully.
+
+                </div>
+
+            {% endif %}
+
+        {% endif %}
+
+
     </main>
+
 </div>
 
+
 </body>
+
 </html>

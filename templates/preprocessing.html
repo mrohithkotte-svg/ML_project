@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Preprocessing - Placement Prediction Project</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="topbar">
+
+    <h1>Placement Prediction Project</h1>
+
+</header>
+
+
+<div class="layout">
+
+    <!-- =================================================
+         SIDEBAR
+         ================================================= -->
+
+    <aside class="sidebar">
+
+        <h3>Modules</h3>
+
+        <a href="{{ url_for('data_loading') }}">
+            Data Loading
+        </a>
+
+        <a href="{{ url_for('eda') }}">
+            EDA
+        </a>
+
+        <a
+            href="{{ url_for('preprocessing') }}"
+            class="active"
+        >
+            Preprocessing
+        </a>
+
+        <a href="{{ url_for('linear_regression') }}">
+            Linear Regression
+        </a>
+
+        <a class="disabled">
+            Model Training
+            <br>
+            (coming soon)
+        </a>
+
+        <a class="disabled">
+            Prediction
+            <br>
+            (coming soon)
+        </a>
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN CONTENT
+         ================================================= -->
+
+    <main class="content">
+
+        <section class="card">
+
+            <h2>Data Preprocessing</h2>
+
+            <p>
+                Data cleaning, missing-value handling,
+                feature encoding, feature scaling and
+                train-test splitting.
+            </p>
+
+        </section>
+
+
+        {% if error %}
+
+        <div class="error">
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if preprocessing %}
+
+        <!-- =============================================
+             DATASET INFORMATION
+             ============================================= -->
+
+        <section class="card">
+
+            <h2>Dataset Information</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Original Rows</th>
+
+                    <td>
+                        {{ preprocessing.original_rows }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Original Columns</th>
+
+                    <td>
+                        {{ preprocessing.original_columns }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Duplicate Rows Before Removal</th>
+
+                    <td>
+                        {{ preprocessing.duplicates_before }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Duplicate Rows After Removal</th>
+
+                    <td>
+                        {{ preprocessing.duplicates_after }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Missing Values Before Handling</th>
+
+                    <td>
+                        {{ preprocessing.missing_before }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Missing Values After Handling</th>
+
+                    <td>
+                        {{ preprocessing.missing_after }}
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+
+        <!-- =============================================
+             FEATURES
+             ============================================= -->
+
+        <section class="card">
+
+            <h2>Features Used for Machine Learning</h2>
+
+            <h3>Numerical Features</h3>
+
+            {% if preprocessing.numeric_features %}
+
+            <ul>
+
+                {% for feature in preprocessing.numeric_features %}
+
+                <li>{{ feature }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% else %}
+
+            <p>No numerical features.</p>
+
+            {% endif %}
+
+
+            <h3>Categorical Features</h3>
+
+            {% if preprocessing.categorical_features %}
+
+            <ul>
+
+                {% for feature in preprocessing.categorical_features %}
+
+                <li>{{ feature }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+            {% else %}
+
+            <p>No categorical features.</p>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =============================================
+             TARGET
+             ============================================= -->
+
+        <section class="card">
+
+            <h2>Target Variable</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Target</th>
+
+                    <td>
+                        {{ preprocessing.target }}
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+
+        <!-- =============================================
+             TRAIN TEST SPLIT
+             ============================================= -->
+
+        <section class="card">
+
+            <h2>Train-Test Split</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Training Rows</th>
+
+                    <td>
+                        {{ preprocessing.training_rows }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Testing Rows</th>
+
+                    <td>
+                        {{ preprocessing.testing_rows }}
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+
+        <!-- =============================================
+             PROCESSED DATA
+             ============================================= -->
+
+        <section class="card">
+
+            <h2>After Encoding and Scaling</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Processed Training Rows</th>
+
+                    <td>
+                        {{ preprocessing.processed_training_rows }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Processed Training Columns</th>
+
+                    <td>
+                        {{ preprocessing.processed_training_columns }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Processed Testing Rows</th>
+
+                    <td>
+                        {{ preprocessing.processed_testing_rows }}
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Processed Testing Columns</th>
+
+                    <td>
+                        {{ preprocessing.processed_testing_columns }}
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </section>
+
+
+        <!-- =============================================
+             SUCCESS
+             ============================================= -->
+
+        <div class="success">
+
+            ✓ Preprocessing completed successfully.
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

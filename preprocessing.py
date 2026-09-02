@@ -8,40 +8,45 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 
+# =========================================================
+# MAIN PREPROCESSING FUNCTION
+# =========================================================
+
 def preprocess_data():
 
     print("\n========== PREPROCESSING STARTED ==========")
 
-    # ==================================================
+    # =====================================================
     # 1. LOAD DATA
-    # ==================================================
+    # =====================================================
 
     data = load_data()
+
+    original_rows = int(data.shape[0])
+    original_columns = int(data.shape[1])
 
     print("\nOriginal dataset shape:")
     print(data.shape)
 
-    print("\nOriginal columns:")
-    print(data.columns.tolist())
+    # =====================================================
+    # 2. DUPLICATE HANDLING
+    # =====================================================
 
-    # ==================================================
-    # 2. REMOVE DUPLICATE ROWS
-    # ==================================================
-
-    print("\n========== DUPLICATE HANDLING ==========")
-
-    duplicate_count = int(data.duplicated().sum())
-
-    print("Duplicate rows before removal:", duplicate_count)
+    duplicate_count = int(
+        data.duplicated().sum()
+    )
 
     if duplicate_count > 0:
+
         data = data.drop_duplicates()
 
-    print("Duplicate rows after removal:", data.duplicated().sum())
+    duplicates_after = int(
+        data.duplicated().sum()
+    )
 
-    # ==================================================
-    # 3. IDENTIFY NUMERICAL AND CATEGORICAL COLUMNS
-    # ==================================================
+    # =====================================================
+    # 3. IDENTIFY COLUMNS
+    # =====================================================
 
     numeric_columns = data.select_dtypes(
         include=[np.number]
@@ -51,9 +56,9 @@ def preprocess_data():
         include=["object", "category", "string"]
     ).columns.tolist()
 
-    # ==================================================
-    # 4. COLUMNS NOT USED AS ML FEATURES
-    # ==================================================
+    # =====================================================
+    # 4. EXCLUDED COLUMNS
+    # =====================================================
 
     exclude_columns = [
         "StudentID",
@@ -63,151 +68,139 @@ def preprocess_data():
         "CGPA_Tier"
     ]
 
-    # Remove excluded columns from numerical list
     numeric_columns = [
-        col for col in numeric_columns
+        col
+        for col in numeric_columns
         if col not in exclude_columns
     ]
 
-    # Remove excluded columns from categorical list
     categorical_columns = [
-        col for col in categorical_columns
+        col
+        for col in categorical_columns
         if col not in exclude_columns
     ]
 
-    print("\n========== FEATURES USED FOR ML ==========")
+    # =====================================================
+    # 5. HANDLE NUMERICAL MISSING VALUES
+    # =====================================================
 
-    print("\nNumerical columns:")
-    for col in numeric_columns:
-        print(" -", col)
-
-    print("\nCategorical columns:")
-    for col in categorical_columns:
-        print(" -", col)
-
-    # ==================================================
-    # 5. HANDLE MISSING NUMERICAL VALUES
-    # ==================================================
-
-    print("\n========== NUMERICAL MISSING VALUES ==========")
+    numerical_missing = {}
 
     for col in numeric_columns:
 
-        missing_count = int(data[col].isnull().sum())
+        missing_count = int(
+            data[col].isnull().sum()
+        )
+
+        numerical_missing[col] = missing_count
 
         if missing_count > 0:
 
             median_value = data[col].median()
 
-            print(
-                f"{col}: {missing_count} missing values "
-                f"-> filling with median {median_value}"
+            data[col] = data[col].fillna(
+                median_value
             )
 
-            data[col] = data[col].fillna(median_value)
+    # =====================================================
+    # 6. HANDLE CATEGORICAL MISSING VALUES
+    # =====================================================
 
-    # ==================================================
-    # 6. HANDLE MISSING CATEGORICAL VALUES
-    # ==================================================
-
-    print("\n========== CATEGORICAL MISSING VALUES ==========")
+    categorical_missing = {}
 
     for col in categorical_columns:
 
-        missing_count = int(data[col].isnull().sum())
+        missing_count = int(
+            data[col].isnull().sum()
+        )
+
+        categorical_missing[col] = missing_count
 
         if missing_count > 0:
 
-            mode_value = data[col].mode()[0]
+            mode_values = data[col].mode()
 
-            print(
-                f"{col}: {missing_count} missing values "
-                f"-> filling with mode '{mode_value}'"
-            )
+            if not mode_values.empty:
 
-            data[col] = data[col].fillna(mode_value)
+                mode_value = mode_values.iloc[0]
 
-    # ==================================================
-    # 7. CHECK REMAINING MISSING VALUES
-    # ==================================================
+                data[col] = data[col].fillna(
+                    mode_value
+                )
 
-    print("\n========== MISSING VALUES AFTER HANDLING ==========")
+            else:
 
-    remaining_missing = data.isnull().sum()
+                data[col] = data[col].fillna(
+                    "Unknown"
+                )
 
-    remaining_missing = remaining_missing[
-        remaining_missing > 0
-    ]
-
-    if remaining_missing.empty:
-        print("No missing values remaining.")
-    else:
-        print(remaining_missing)
-
-    # ==================================================
-    # 8. SEPARATE FEATURES AND TARGET
-    # ==================================================
-
-    print("\n========== TARGET SEPARATION ==========")
+    # =====================================================
+    # 7. TARGET SEPARATION
+    # =====================================================
 
     target = "PlacementStatus"
 
     if target not in data.columns:
+
         raise ValueError(
             f"Target column '{target}' was not found."
         )
 
+    columns_to_remove = [
+        "PlacementStatus",
+        "StudentID",
+        "IsAnomaly",
+        "Salary Package",
+        "CGPA_Tier"
+    ]
+
+    columns_to_remove = [
+        col
+        for col in columns_to_remove
+        if col in data.columns
+    ]
+
     X = data.drop(
-        columns=[
-            "PlacementStatus",
-            "StudentID",
-            "IsAnomaly",
-            "Salary Package",
-            "CGPA_Tier"
-        ]
+        columns=columns_to_remove
     )
 
     y = data[target]
 
-    print("Target column:", target)
-
-    print("X shape:", X.shape)
-    print("y shape:", y.shape)
-
-    print("\nTarget distribution:")
-    print(y.value_counts())
-
-    # ==================================================
-    # 9. TRAIN / TEST SPLIT
-    # ==================================================
-
-    print("\n========== TRAIN / TEST SPLIT ==========")
+    # =====================================================
+    # 8. TRAIN TEST SPLIT
+    # =====================================================
 
     X_train, X_test, y_train, y_test = train_test_split(
+
         X,
         y,
+
         test_size=0.20,
+
         random_state=42,
+
         stratify=y
     )
 
-    print("Training samples:", len(X_train))
-    print("Testing samples:", len(X_test))
+    # =====================================================
+    # 9. PREPROCESSING PIPELINE
+    # =====================================================
 
-    # ==================================================
-    # 10. PREPROCESSING PIPELINE
-    # ==================================================
+    transformers = []
 
-    print("\n========== ENCODING AND SCALING ==========")
+    if numeric_columns:
 
-    preprocessor = ColumnTransformer(
-        transformers=[
+        transformers.append(
             (
                 "numeric",
                 StandardScaler(),
                 numeric_columns
-            ),
+            )
+        )
 
+    if categorical_columns:
+
+        transformers.append(
             (
                 "categorical",
                 OneHotEncoder(
@@ -215,69 +208,66 @@ def preprocess_data():
                 ),
                 categorical_columns
             )
-        ]
+        )
+
+    preprocessor = ColumnTransformer(
+        transformers=transformers
     )
 
-    # ==================================================
-    # 11. FIT PREPROCESSOR ON TRAINING DATA
-    # ==================================================
+    # =====================================================
+    # 10. FIT TRAINING DATA
+    # =====================================================
 
-    print("\nFitting preprocessing on training data...")
-
-    X_train_processed = preprocessor.fit_transform(
-        X_train
+    X_train_processed = (
+        preprocessor.fit_transform(
+            X_train
+        )
     )
 
-    # ==================================================
-    # 12. TRANSFORM TEST DATA
-    # ==================================================
+    # =====================================================
+    # 11. TRANSFORM TEST DATA
+    # =====================================================
 
-    print("Transforming testing data...")
-
-    X_test_processed = preprocessor.transform(
-        X_test
+    X_test_processed = (
+        preprocessor.transform(
+            X_test
+        )
     )
 
-    # ==================================================
-    # 13. FINAL RESULTS
-    # ==================================================
+    # =====================================================
+    # 12. RESULTS
+    # =====================================================
 
     print("\n========== PREPROCESSING COMPLETED ==========")
 
-    print("\nOriginal dataset shape:")
-    print(data.shape)
-
-    print("\nBefore preprocessing:")
-    print("X_train:", X_train.shape)
-    print("X_test :", X_test.shape)
-
-    print("\nAfter preprocessing:")
+    print(
+        "Original shape:",
+        data.shape
+    )
 
     print(
-        "X_train_processed:",
+        "X train:",
+        X_train.shape
+    )
+
+    print(
+        "X test:",
+        X_test.shape
+    )
+
+    print(
+        "Processed X train:",
         X_train_processed.shape
     )
 
     print(
-        "X_test_processed :",
+        "Processed X test:",
         X_test_processed.shape
     )
 
-    print(
-        "y_train:",
-        y_train.shape
-    )
-
-    print(
-        "y_test :",
-        y_test.shape
-    )
-
-    print("\n========== PREPROCESSING SUCCESSFUL ==========")
-
-    # ==================================================
-    # 14. RETURN RESULTS
-    # ==================================================
+    # =====================================================
+    # 13. RETURN ORIGINAL RESULTS
+    # =====================================================
 
     return (
         X_train_processed,
@@ -288,9 +278,250 @@ def preprocess_data():
     )
 
 
-# ======================================================
-# RUN PROGRAM
-# ======================================================
+# =========================================================
+# FLASK-FRIENDLY PREPROCESSING
+# =========================================================
+
+def run_preprocessing():
+
+    data = load_data()
+
+    # =====================================================
+    # ORIGINAL INFORMATION
+    # =====================================================
+
+    original_rows = int(
+        data.shape[0]
+    )
+
+    original_columns = int(
+        data.shape[1]
+    )
+
+    # =====================================================
+    # DUPLICATES
+    # =====================================================
+
+    duplicates_before = int(
+        data.duplicated().sum()
+    )
+
+    data_clean = data.drop_duplicates()
+
+    duplicates_after = int(
+        data_clean.duplicated().sum()
+    )
+
+    # =====================================================
+    # COLUMNS
+    # =====================================================
+
+    numeric_columns = data_clean.select_dtypes(
+        include=[np.number]
+    ).columns.tolist()
+
+    categorical_columns = data_clean.select_dtypes(
+        include=["object", "category", "string"]
+    ).columns.tolist()
+
+    excluded = [
+        "StudentID",
+        "PlacementStatus",
+        "IsAnomaly",
+        "Salary Package",
+        "CGPA_Tier"
+    ]
+
+    numeric_features = [
+        col
+        for col in numeric_columns
+        if col not in excluded
+    ]
+
+    categorical_features = [
+        col
+        for col in categorical_columns
+        if col not in excluded
+    ]
+
+    # =====================================================
+    # MISSING VALUES BEFORE
+    # =====================================================
+
+    missing_before = int(
+        data_clean.isnull().sum().sum()
+    )
+
+    # =====================================================
+    # HANDLE MISSING VALUES
+    # =====================================================
+
+    for col in numeric_features:
+
+        if data_clean[col].isnull().sum() > 0:
+
+            data_clean[col] = data_clean[col].fillna(
+                data_clean[col].median()
+            )
+
+    for col in categorical_features:
+
+        if data_clean[col].isnull().sum() > 0:
+
+            mode_values = data_clean[col].mode()
+
+            if not mode_values.empty:
+
+                data_clean[col] = data_clean[col].fillna(
+                    mode_values.iloc[0]
+                )
+
+            else:
+
+                data_clean[col] = data_clean[col].fillna(
+                    "Unknown"
+                )
+
+    # =====================================================
+    # MISSING VALUES AFTER
+    # =====================================================
+
+    missing_after = int(
+        data_clean.isnull().sum().sum()
+    )
+
+    # =====================================================
+    # TARGET
+    # =====================================================
+
+    target = "PlacementStatus"
+
+    # =====================================================
+    # TRAIN TEST SPLIT
+    # =====================================================
+
+    X = data_clean.drop(
+        columns=[
+            col
+            for col in excluded
+            if col in data_clean.columns
+        ]
+    )
+
+    y = data_clean[target]
+
+    X_train, X_test, y_train, y_test = train_test_split(
+
+        X,
+        y,
+
+        test_size=0.20,
+
+        random_state=42,
+
+        stratify=y
+    )
+
+    # =====================================================
+    # ENCODING + SCALING
+    # =====================================================
+
+    transformers = []
+
+    if numeric_features:
+
+        transformers.append(
+            (
+                "numeric",
+                StandardScaler(),
+                numeric_features
+            )
+        )
+
+    if categorical_features:
+
+        transformers.append(
+            (
+                "categorical",
+                OneHotEncoder(
+                    handle_unknown="ignore"
+                ),
+                categorical_features
+            )
+        )
+
+    preprocessor = ColumnTransformer(
+        transformers=transformers
+    )
+
+    X_train_processed = (
+        preprocessor.fit_transform(
+            X_train
+        )
+    )
+
+    X_test_processed = (
+        preprocessor.transform(
+            X_test
+        )
+    )
+
+    # =====================================================
+    # RETURN WEB RESULTS
+    # =====================================================
+
+    return {
+
+        "original_rows":
+            original_rows,
+
+        "original_columns":
+            original_columns,
+
+        "duplicates_before":
+            duplicates_before,
+
+        "duplicates_after":
+            duplicates_after,
+
+        "missing_before":
+            missing_before,
+
+        "missing_after":
+            missing_after,
+
+        "numeric_features":
+            numeric_features,
+
+        "categorical_features":
+            categorical_features,
+
+        "target":
+            target,
+
+        "training_rows":
+            int(len(X_train)),
+
+        "testing_rows":
+            int(len(X_test)),
+
+        "processed_training_rows":
+            int(X_train_processed.shape[0]),
+
+        "processed_training_columns":
+            int(X_train_processed.shape[1]),
+
+        "processed_testing_rows":
+            int(X_test_processed.shape[0]),
+
+        "processed_testing_columns":
+            int(X_test_processed.shape[1])
+    }
+
+
+# =========================================================
+# TEST
+# =========================================================
 
 if __name__ == "__main__":
 

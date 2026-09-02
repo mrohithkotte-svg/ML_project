@@ -4,6 +4,7 @@ from load_data import get_data_summary
 from placement_eda import run_eda
 from preprocessing import run_preprocessing
 from linear_regression import run_linear_regression
+from Logistic_Regression import run_logistic_regression
 
 
 # =========================================================
@@ -139,6 +140,32 @@ def linear_regression():
             error=str(e)
         )
 
+# =========================================================
+# LOGISTIC REGRESSION
+# =========================================================
+
+@app.route("/logistic-regression")
+def logistic_regression():
+
+    try:
+
+        result = run_logistic_regression()
+
+        return render_template(
+            "logistic_regression.html",
+            active="logistic-regression",
+            logistic=result,
+            error=None
+        )
+
+    except Exception as e:
+
+        return render_template(
+            "logistic_regression.html",
+            active="logistic-regression",
+            logistic=None,
+            error=str(e)
+        )
 
 # =========================================================
 # RUN APPLICATION

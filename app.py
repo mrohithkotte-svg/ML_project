@@ -6,6 +6,11 @@ from preprocessing import run_preprocessing
 from linear_regression import run_linear_regression
 from Logistic_Regression import run_logistic_regression
 
+from decision_tree import run_decision_tree
+from random_forest import run_random_forest
+from bagging import run_bagging
+from boosting import run_boosting
+
 
 # =========================================================
 # FLASK APPLICATION
@@ -140,6 +145,7 @@ def linear_regression():
             error=str(e)
         )
 
+
 # =========================================================
 # LOGISTIC REGRESSION
 # =========================================================
@@ -166,6 +172,119 @@ def logistic_regression():
             logistic=None,
             error=str(e)
         )
+
+
+# =========================================================
+# DECISION TREE
+# =========================================================
+
+@app.route("/decision-tree")
+def decision_tree():
+
+    try:
+
+        result = run_decision_tree()
+
+        return render_template(
+            "decision_tree.html",
+            active="decision-tree",
+            result=result,
+            error=None
+        )
+
+    except Exception as e:
+
+        return render_template(
+            "decision_tree.html",
+            active="decision-tree",
+            result=None,
+            error=str(e)
+        )
+
+
+# =========================================================
+# RANDOM FOREST
+# =========================================================
+
+@app.route("/random-forest")
+def random_forest():
+
+    try:
+
+        result = run_random_forest()
+
+        return render_template(
+            "random_forest.html",
+            active="random-forest",
+            result=result,
+            error=None
+        )
+
+    except Exception as e:
+
+        return render_template(
+            "random_forest.html",
+            active="random-forest",
+            result=None,
+            error=str(e)
+        )
+
+
+# =========================================================
+# BAGGING
+# =========================================================
+
+@app.route("/bagging")
+def bagging():
+
+    try:
+
+        result = run_bagging()
+
+        return render_template(
+            "bagging.html",
+            active="bagging",
+            result=result,
+            error=None
+        )
+
+    except Exception as e:
+
+        return render_template(
+            "bagging.html",
+            active="bagging",
+            result=None,
+            error=str(e)
+        )
+
+
+# =========================================================
+# BOOSTING
+# =========================================================
+
+@app.route("/boosting")
+def boosting():
+
+    try:
+
+        result = run_boosting()
+
+        return render_template(
+            "boosting.html",
+            active="boosting",
+            result=result,
+            error=None
+        )
+
+    except Exception as e:
+
+        return render_template(
+            "boosting.html",
+            active="boosting",
+            result=None,
+            error=str(e)
+        )
+
 
 # =========================================================
 # RUN APPLICATION

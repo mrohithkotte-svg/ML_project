@@ -296,3 +296,80 @@ li {
         grid-template-columns: 1fr;
     }
 }
+/* =========================================================
+   TREE BASED ALGORITHM DROPDOWN
+   ========================================================= */
+
+.tree-menu {
+    list-style: none;
+}
+
+
+/* Dropdown heading */
+
+.tree-menu details {
+    width: 100%;
+}
+
+
+/* Dropdown button */
+
+.tree-menu summary {
+    cursor: pointer;
+    font-size: 24px;
+    padding: 12px 0;
+    color: white;
+    list-style: none;
+}
+
+
+/* Remove default triangle */
+
+.tree-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+
+/* Arrow */
+
+.tree-menu summary::after {
+    content: "▾";
+    float: right;
+    margin-right: 20px;
+    font-size: 18px;
+}
+
+
+/* Submenu */
+
+.tree-submenu {
+    list-style: none;
+    margin: 5px 0 10px 20px;
+    padding: 0;
+}
+
+
+/* Submenu items */
+
+.tree-submenu li {
+    margin: 5px 0;
+}
+
+
+/* Links */
+
+.tree-submenu a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 8px 10px;
+    border-radius: 5px;
+}
+
+
+/* Hover */
+
+.tree-submenu a:hover {
+    background: rgba(255, 255, 255, 0.15);
+}

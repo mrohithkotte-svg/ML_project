@@ -1,13 +1,15 @@
 /* =====================================================
    GENERAL
-   ===================================================== */
+===================================================== */
 
 * {
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
+    padding: 0;
     font-family: Arial, Helvetica, sans-serif;
     background: #f4f6f8;
     color: #17212b;
@@ -16,10 +18,11 @@ body {
 
 /* =====================================================
    TOP BAR
-   ===================================================== */
+===================================================== */
 
 .topbar {
     height: 78px;
+
     background: #24466f;
     color: white;
 
@@ -31,6 +34,7 @@ body {
 
 .topbar h1 {
     margin: 0;
+
     font-size: 28px;
     font-weight: 700;
 }
@@ -38,93 +42,317 @@ body {
 
 /* =====================================================
    MAIN LAYOUT
-   ===================================================== */
+===================================================== */
 
 .layout {
     display: flex;
+
     min-height: calc(100vh - 78px);
 }
 
 
 /* =====================================================
    SIDEBAR
-   ===================================================== */
+===================================================== */
 
 .sidebar {
     width: 210px;
+
     flex-shrink: 0;
 
     background: #2d527d;
 
     min-height: calc(100vh - 78px);
+
+    overflow-y: auto;
 }
+
+
+/* Sidebar heading */
 
 .sidebar h3 {
     margin: 0;
+
     padding: 28px 20px 18px;
 
-    color: #ffffff;
+    color: white;
+
     font-size: 17px;
 }
 
-.sidebar a {
+
+/* =====================================================
+   SIDEBAR LIST
+===================================================== */
+
+.sidebar ul {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar li {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =====================================================
+   NORMAL SIDEBAR LINKS
+===================================================== */
+
+.sidebar a,
+.sidebar .menu-item {
     display: block;
+
+    width: 100%;
 
     padding: 18px 20px;
 
     color: white;
+
     text-decoration: none;
 
     font-size: 15px;
+
     line-height: 1.5;
+
+    cursor: pointer;
 }
 
-.sidebar a:hover {
+
+/* Hover */
+
+.sidebar a:hover,
+.sidebar .menu-item:hover {
     background: #3e70a8;
 }
 
-.sidebar a.active {
+
+/* Active */
+
+.sidebar a.active,
+.sidebar .menu-item.active {
     background: #477db8;
+
     font-weight: bold;
 
     border-left: 4px solid white;
+
+    padding-left: 16px;
 }
 
-.sidebar a.disabled {
+
+/* Disabled */
+
+.sidebar a.disabled,
+.sidebar .menu-item.disabled {
     color: #9db4ce;
+
     cursor: default;
+}
+
+.sidebar a.disabled:hover,
+.sidebar .menu-item.disabled:hover {
+    background: transparent;
+}
+
+
+/* =====================================================
+   TREE BASED ALGORITHM DROPDOWN
+===================================================== */
+
+.tree-menu {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Details */
+
+.tree-menu details {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =====================================================
+   DROPDOWN TITLE
+===================================================== */
+
+.tree-menu summary {
+    list-style: none;
+
+    display: block;
+
+    width: 100%;
+
+    padding: 18px 20px;
+
+    color: white;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+
+/* Remove browser arrow */
+
+.tree-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.tree-menu summary::marker {
+    display: none;
+}
+
+
+/* =====================================================
+   DROPDOWN ARROW
+===================================================== */
+
+.tree-menu summary::after {
+    content: "▼";
+
+    float: right;
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+    transition: transform 0.2s ease;
+}
+
+
+/* Closed = sideways arrow */
+
+.tree-menu details:not([open]) summary::after {
+    transform: rotate(-90deg);
+}
+
+
+/* Open */
+
+.tree-menu details[open] summary {
+    background: #2d527d;
+}
+
+
+/* Hover */
+
+.tree-menu summary:hover {
+    background: #3e70a8;
+}
+
+
+/* =====================================================
+   TREE SUBMENU
+===================================================== */
+
+.tree-submenu {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+
+    background: #24466f;
+}
+
+
+/* Submenu item */
+
+.tree-submenu li {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Submenu links */
+
+.tree-submenu a {
+    display: block;
+
+    width: 100%;
+
+    padding: 13px 20px 13px 35px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* Submenu hover */
+
+.tree-submenu a:hover {
+    background: #3f73aa;
+}
+
+
+/* Submenu active */
+
+.tree-submenu a.active {
+    background: #4a82bc;
+
+    font-weight: bold;
+
+    border-left: 4px solid white;
+
+    padding-left: 31px;
 }
 
 
 /* =====================================================
    CONTENT
-   ===================================================== */
+===================================================== */
 
 .content {
     flex: 1;
 
-    padding: 35px 40px;
-
     min-width: 0;
+
+    padding: 35px 40px;
 }
+
 
 .content > h2 {
     margin-top: 0;
+
     margin-bottom: 25px;
 
     font-size: 28px;
+
     color: #173a61;
 }
 
 
 /* =====================================================
    CARDS
-   ===================================================== */
+===================================================== */
 
 .card {
     background: white;
 
     border: 1px solid #d8dee5;
+
     border-radius: 7px;
 
     padding: 24px;
@@ -134,21 +362,48 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+
 .card h2 {
     margin-top: 0;
 
     color: #173a61;
 }
 
+
 .card h3 {
     color: #173a61;
+
     margin-top: 20px;
 }
 
 
 /* =====================================================
+   RESULT CARD
+===================================================== */
+
+.result-card {
+    background: white;
+
+    border: 1px solid #d8dee5;
+
+    border-radius: 7px;
+
+    padding: 24px;
+
+    margin-top: 20px;
+
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+
+.result-card h3 {
+    color: #173a61;
+}
+
+
+/* =====================================================
    TABLES
-   ===================================================== */
+===================================================== */
 
 table {
     border-collapse: collapse;
@@ -157,6 +412,7 @@ table {
 
     background: white;
 }
+
 
 th,
 td {
@@ -169,10 +425,13 @@ td {
     font-size: 15px;
 }
 
+
 th {
     background: #edf1f5;
+
     font-weight: 700;
 }
+
 
 tr:hover td {
     background: #f8fafc;
@@ -180,8 +439,32 @@ tr:hover td {
 
 
 /* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    margin-bottom: 25px;
+}
+
+
+/* =====================================================
+   SUMMARY TABLE
+===================================================== */
+
+.summary-table {
+    width: 100%;
+
+    margin-bottom: 25px;
+}
+
+
+/* =====================================================
    CHART GRID
-   ===================================================== */
+===================================================== */
 
 .charts-grid {
     display: grid;
@@ -196,6 +479,11 @@ tr:hover td {
     width: 100%;
 }
 
+
+/* =====================================================
+   CHART CARD
+===================================================== */
+
 .chart-card {
     border: 1px solid #d8dee5;
 
@@ -206,8 +494,10 @@ tr:hover td {
     padding: 18px;
 }
 
+
 .chart-card h4 {
     margin-top: 0;
+
     margin-bottom: 15px;
 
     color: #173a61;
@@ -215,10 +505,12 @@ tr:hover td {
     font-size: 18px;
 }
 
+
 .chart-card img {
     display: block;
 
     width: 100%;
+
     height: auto;
 
     max-width: 100%;
@@ -227,7 +519,7 @@ tr:hover td {
 
 /* =====================================================
    ERROR
-   ===================================================== */
+===================================================== */
 
 .error {
     background: #fff0f0;
@@ -246,7 +538,7 @@ tr:hover td {
 
 /* =====================================================
    SUCCESS
-   ===================================================== */
+===================================================== */
 
 .success {
     background: #eefaf0;
@@ -265,22 +557,55 @@ tr:hover td {
 
 /* =====================================================
    LISTS
-   ===================================================== */
+===================================================== */
 
-ul {
+.content ul {
     margin-top: 10px;
 
     padding-left: 25px;
 }
 
-li {
+
+.content li {
     margin-bottom: 7px;
 }
 
 
 /* =====================================================
+   PAGE CONTAINER
+   Used by older model pages
+===================================================== */
+
+.page-container {
+    padding: 35px 40px;
+}
+
+
+.page-container h2 {
+    margin-top: 0;
+
+    color: #173a61;
+
+    font-size: 28px;
+}
+
+
+/* =====================================================
+   HORIZONTAL RULE
+===================================================== */
+
+hr {
+    border: 0;
+
+    border-top: 1px solid #d8dee5;
+
+    margin: 25px 0;
+}
+
+
+/* =====================================================
    RESPONSIVE
-   ===================================================== */
+===================================================== */
 
 @media (max-width: 900px) {
 
@@ -292,84 +617,57 @@ li {
         padding: 25px;
     }
 
+    .page-container {
+        padding: 25px;
+    }
+
     .charts-grid {
         grid-template-columns: 1fr;
     }
 }
-/* =========================================================
-   TREE BASED ALGORITHM DROPDOWN
-   ========================================================= */
-
-.tree-menu {
-    list-style: none;
-}
 
 
-/* Dropdown heading */
+@media (max-width: 650px) {
 
-.tree-menu details {
-    width: 100%;
-}
+    .topbar {
+        height: 65px;
 
+        padding: 0 18px;
+    }
 
-/* Dropdown button */
+    .topbar h1 {
+        font-size: 21px;
+    }
 
-.tree-menu summary {
-    cursor: pointer;
-    font-size: 24px;
-    padding: 12px 0;
-    color: white;
-    list-style: none;
-}
+    .layout {
+        min-height: calc(100vh - 65px);
+    }
 
+    .sidebar {
+        width: 165px;
 
-/* Remove default triangle */
+        min-height: calc(100vh - 65px);
+    }
 
-.tree-menu summary::-webkit-details-marker {
-    display: none;
-}
+    .sidebar a,
+    .sidebar .menu-item,
+    .tree-menu summary {
+        padding: 15px 12px;
 
+        font-size: 14px;
+    }
 
-/* Arrow */
+    .tree-submenu a {
+        padding: 12px 10px 12px 25px;
 
-.tree-menu summary::after {
-    content: "▾";
-    float: right;
-    margin-right: 20px;
-    font-size: 18px;
-}
+        font-size: 13px;
+    }
 
+    .content {
+        padding: 20px;
+    }
 
-/* Submenu */
-
-.tree-submenu {
-    list-style: none;
-    margin: 5px 0 10px 20px;
-    padding: 0;
-}
-
-
-/* Submenu items */
-
-.tree-submenu li {
-    margin: 5px 0;
-}
-
-
-/* Links */
-
-.tree-submenu a {
-    display: block;
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-    padding: 8px 10px;
-    border-radius: 5px;
-}
-
-
-/* Hover */
-
-.tree-submenu a:hover {
-    background: rgba(255, 255, 255, 0.15);
+    .page-container {
+        padding: 20px;
+    }
 }

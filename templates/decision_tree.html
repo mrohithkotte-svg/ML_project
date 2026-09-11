@@ -5,6 +5,9 @@
 
     <meta charset="UTF-8">
 
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Decision Tree</title>
 
     <link
@@ -18,87 +21,237 @@
 
 <header class="topbar">
 
-    <h1>Placement Prediction Project</h1>
+    <h1>
+        Placement Prediction Project
+    </h1>
 
 </header>
 
 
-<div class="page-container">
-
-    <h2>Decision Tree Classifier</h2>
-
-    <p>
-        Decision Tree is a supervised machine learning algorithm
-        used to predict student placement status.
-    </p>
+<div class="layout">
 
 
-    {% if error %}
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-        <div class="error">
-            {{ error }}
-        </div>
+    <nav class="sidebar">
 
-    {% endif %}
+        <ul>
+
+            <li>
+                <a
+                    href="{{ url_for('data_loading') }}"
+                    class="menu-item {% if request.path == '/data-loading' %}active{% endif %}"
+                >
+                    Data Loading
+                </a>
+            </li>
 
 
-    {% if result %}
+            <li>
+                <a
+                    href="{{ url_for('eda') }}"
+                    class="menu-item {% if request.path == '/eda' %}active{% endif %}"
+                >
+                    EDA
+                </a>
+            </li>
 
-        <div class="result-card">
 
-            <h3>{{ result.model }}</h3>
+            <li>
+                <a
+                    href="{{ url_for('preprocessing') }}"
+                    class="menu-item {% if request.path == '/preprocessing' %}active{% endif %}"
+                >
+                    Preprocessing
+                </a>
+            </li>
 
-            <p>
-                Training Samples:
-                <strong>{{ result.training_samples }}</strong>
-            </p>
 
-            <p>
-                Testing Samples:
-                <strong>{{ result.testing_samples }}</strong>
-            </p>
+            <li>
+                <a
+                    href="{{ url_for('linear_regression') }}"
+                    class="menu-item {% if request.path == '/linear-regression' %}active{% endif %}"
+                >
+                    Linear Regression
+                </a>
+            </li>
 
-            <hr>
 
-            <h3>Model Evaluation</h3>
+            <li>
+                <a
+                    href="{{ url_for('logistic_regression') }}"
+                    class="menu-item {% if request.path == '/logistic-regression' %}active{% endif %}"
+                >
+                    Logistic Regression
+                </a>
+            </li>
 
-            <p>
-                Accuracy:
-                <strong>{{ result.accuracy }}%</strong>
-            </p>
 
-            <p>
-                Precision:
-                <strong>{{ result.precision }}%</strong>
-            </p>
+            <!-- TREE BASED ALGORITHM -->
 
-            <p>
-                Recall:
-                <strong>{{ result.recall }}%</strong>
-            </p>
+            <li class="tree-menu">
 
-            <p>
-                F1 Score:
-                <strong>{{ result.f1_score }}%</strong>
-            </p>
+                <details open>
 
-            <hr>
+                    <summary>
+                        Tree Based Algorithm
+                    </summary>
 
-            <h3>Features Used</h3>
+                    <ul class="tree-submenu">
 
-            <ul>
+                        <li>
+                            <a
+                                href="/decision-tree"
+                                class="active"
+                            >
+                                Decision Tree
+                            </a>
+                        </li>
 
-                {% for feature in result.features %}
+                        <li>
+                            <a href="/random-forest">
+                                Random Forest
+                            </a>
+                        </li>
 
-                    <li>{{ feature }}</li>
+                        <li>
+                            <a href="/bagging">
+                                Bagging
+                            </a>
+                        </li>
 
-                {% endfor %}
+                        <li>
+                            <a href="/boosting">
+                                Boosting
+                            </a>
+                        </li>
 
-            </ul>
+                    </ul>
 
-        </div>
+                </details>
 
-    {% endif %}
+            </li>
+
+
+            <li>
+                <span class="menu-item disabled">
+                    Prediction
+                    (coming soon)
+                </span>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
+
+    <main class="content">
+
+        <h2>
+            Decision Tree Classifier
+        </h2>
+
+        <p>
+            Decision Tree is a supervised machine learning
+            algorithm used to predict student placement status.
+        </p>
+
+
+        {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        {% if result %}
+
+            <div class="result-card">
+
+                <h3>
+                    {{ result.model }}
+                </h3>
+
+                <p>
+                    Training Samples:
+                    <strong>
+                        {{ result.training_samples }}
+                    </strong>
+                </p>
+
+                <p>
+                    Testing Samples:
+                    <strong>
+                        {{ result.testing_samples }}
+                    </strong>
+                </p>
+
+                <hr>
+
+                <h3>
+                    Model Evaluation
+                </h3>
+
+                <p>
+                    Accuracy:
+                    <strong>
+                        {{ result.accuracy }}%
+                    </strong>
+                </p>
+
+                <p>
+                    Precision:
+                    <strong>
+                        {{ result.precision }}%
+                    </strong>
+                </p>
+
+                <p>
+                    Recall:
+                    <strong>
+                        {{ result.recall }}%
+                    </strong>
+                </p>
+
+                <p>
+                    F1 Score:
+                    <strong>
+                        {{ result.f1_score }}%
+                    </strong>
+                </p>
+
+                <hr>
+
+                <h3>
+                    Features Used
+                </h3>
+
+                <ul>
+
+                    {% for feature in result.features %}
+
+                        <li>
+                            {{ feature }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        {% endif %}
+
+    </main>
 
 </div>
 

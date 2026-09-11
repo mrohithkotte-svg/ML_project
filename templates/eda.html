@@ -415,48 +415,130 @@
      SIDEBAR
 ===================================================== -->
 
-<div class="sidebar">
+<nav class="sidebar">
 
     <div class="sidebar-title">
         Modules
     </div>
 
-    <a href="/data-loading">
-        Data Loading
-    </a>
 
-    <a href="/eda"
-       class="active">
-        EDA
-    </a>
+    <ul>
 
-    <a href="/preprocessing">
-        Preprocessing
-    </a>
+        <li>
 
-    <a href="/linear-regression">
-        Linear Regression
-    </a>
-<li>
-    <a href="{{ url_for('logistic_regression') }}" class="menu-item">
-        Logistic Regression
-    </a>
-</li>
-    <a class="disabled">
-        Model Training
-        <br>
-        (coming soon)
-    </a>
+            <a
+                href="{{ url_for('data_loading') }}"
+                class="{% if request.path == '/data-loading' %}active{% endif %}"
+            >
+                Data Loading
+            </a>
 
-    <a class="disabled">
-        Prediction
-        <br>
-        (coming soon)
-    </a>
-
-</div>
+        </li>
 
 
+        <li>
+
+            <a
+                href="{{ url_for('eda') }}"
+                class="{% if request.path == '/eda' %}active{% endif %}"
+            >
+                EDA
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="{{ url_for('preprocessing') }}"
+                class="{% if request.path == '/preprocessing' %}active{% endif %}"
+            >
+                Preprocessing
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="{{ url_for('linear_regression') }}"
+                class="{% if request.path == '/linear-regression' %}active{% endif %}"
+            >
+                Linear Regression
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a
+                href="{{ url_for('logistic_regression') }}"
+                class="{% if request.path == '/logistic-regression' %}active{% endif %}"
+            >
+                Logistic Regression
+            </a>
+
+        </li>
+
+
+        <li class="tree-menu">
+
+            <details>
+
+                <summary>
+                    Tree Based Algorithm
+                </summary>
+
+
+                <ul class="tree-submenu">
+
+                    <li>
+                        <a href="/decision-tree">
+                            Decision Tree
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/random-forest">
+                            Random Forest
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/bagging">
+                            Bagging
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/boosting">
+                            Boosting
+                        </a>
+                    </li>
+
+                </ul>
+
+            </details>
+
+        </li>
+
+
+        <li>
+
+            <a class="disabled">
+                Prediction
+                <br>
+                (coming soon)
+            </a>
+
+        </li>
+
+    </ul>
+
+</nav>
 <!-- =====================================================
      MAIN CONTENT
 ===================================================== -->

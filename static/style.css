@@ -1,6 +1,6 @@
 /* =====================================================
-   GENERAL
-===================================================== */
+   PLACEMENT PREDICTION - ML DASHBOARD
+   ===================================================== */
 
 * {
     box-sizing: border-box;
@@ -10,148 +10,132 @@ html,
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f8;
-    color: #17212b;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1e293b;
 }
-
 
 /* =====================================================
    TOP BAR
-===================================================== */
+   ===================================================== */
 
 .topbar {
-    height: 78px;
-
-    background: #24466f;
+    height: 72px;
+    background: #111827;
     color: white;
 
     display: flex;
     align-items: center;
 
     padding: 0 30px;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
 .topbar h1 {
     margin: 0;
-
-    font-size: 28px;
+    font-size: 25px;
     font-weight: 700;
+    letter-spacing: 0.3px;
 }
-
 
 /* =====================================================
    MAIN LAYOUT
-===================================================== */
+   ===================================================== */
 
 .layout {
     display: flex;
-
-    min-height: calc(100vh - 78px);
+    min-height: calc(100vh - 72px);
 }
-
 
 /* =====================================================
    SIDEBAR
-===================================================== */
+   ===================================================== */
 
 .sidebar {
-    width: 210px;
-
+    width: 235px;
     flex-shrink: 0;
 
-    background: #2d527d;
-
-    min-height: calc(100vh - 78px);
+    background: #1e293b;
+    min-height: calc(100vh - 72px);
 
     overflow-y: auto;
+
+    box-shadow: 3px 0 12px rgba(0, 0, 0, 0.08);
 }
-
-
-/* Sidebar heading */
 
 .sidebar h3 {
     margin: 0;
+    padding: 28px 22px 18px;
 
-    padding: 28px 20px 18px;
+    color: #cbd5e1;
 
-    color: white;
-
-    font-size: 17px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-
 
 /* =====================================================
    SIDEBAR LIST
-===================================================== */
+   ===================================================== */
 
 .sidebar ul {
     list-style: none;
-
     margin: 0;
     padding: 0;
 }
 
 .sidebar li {
     list-style: none;
-
     margin: 0;
     padding: 0;
 }
 
-
 /* =====================================================
-   NORMAL SIDEBAR LINKS
-===================================================== */
+   SIDEBAR LINKS
+   ===================================================== */
 
 .sidebar a,
 .sidebar .menu-item {
     display: block;
-
     width: 100%;
 
-    padding: 18px 20px;
+    padding: 15px 22px;
 
-    color: white;
+    color: #cbd5e1;
 
     text-decoration: none;
 
-    font-size: 15px;
-
+    font-size: 14px;
     line-height: 1.5;
 
     cursor: pointer;
+
+    transition: all 0.2s ease;
 }
-
-
-/* Hover */
 
 .sidebar a:hover,
 .sidebar .menu-item:hover {
-    background: #3e70a8;
+    background: #334155;
+    color: white;
 }
-
-
-/* Active */
 
 .sidebar a.active,
 .sidebar .menu-item.active {
-    background: #477db8;
+    background: #2563eb;
 
-    font-weight: bold;
+    color: white;
 
-    border-left: 4px solid white;
+    font-weight: 600;
 
-    padding-left: 16px;
+    border-left: 4px solid #60a5fa;
+
+    padding-left: 18px;
 }
-
-
-/* Disabled */
 
 .sidebar a.disabled,
 .sidebar .menu-item.disabled {
-    color: #9db4ce;
-
+    color: #64748b;
     cursor: default;
 }
 
@@ -160,55 +144,40 @@ body {
     background: transparent;
 }
 
-
 /* =====================================================
-   TREE BASED ALGORITHM DROPDOWN
-===================================================== */
+   TREE MENU
+   ===================================================== */
 
 .tree-menu {
     list-style: none;
-
     margin: 0;
     padding: 0;
 }
-
-
-/* Details */
 
 .tree-menu details {
     width: 100%;
-
     margin: 0;
     padding: 0;
 }
-
-
-/* =====================================================
-   DROPDOWN TITLE
-===================================================== */
 
 .tree-menu summary {
     list-style: none;
 
     display: block;
-
     width: 100%;
 
-    padding: 18px 20px;
+    padding: 15px 22px;
 
-    color: white;
+    color: #cbd5e1;
 
-    font-size: 15px;
-
+    font-size: 14px;
     line-height: 1.5;
 
     cursor: pointer;
-
     user-select: none;
+
+    transition: all 0.2s ease;
 }
-
-
-/* Remove browser arrow */
 
 .tree-menu summary::-webkit-details-marker {
     display: none;
@@ -218,192 +187,347 @@ body {
     display: none;
 }
 
-
-/* =====================================================
-   DROPDOWN ARROW
-===================================================== */
-
 .tree-menu summary::after {
     content: "▼";
 
     float: right;
 
-    font-size: 11px;
+    font-size: 9px;
 
     margin-top: 3px;
 
     transition: transform 0.2s ease;
 }
 
-
-/* Closed = sideways arrow */
-
 .tree-menu details:not([open]) summary::after {
     transform: rotate(-90deg);
 }
 
-
-/* Open */
-
 .tree-menu details[open] summary {
-    background: #2d527d;
+    background: #263548;
+    color: white;
 }
-
-
-/* Hover */
 
 .tree-menu summary:hover {
-    background: #3e70a8;
+    background: #334155;
+    color: white;
 }
-
 
 /* =====================================================
    TREE SUBMENU
-===================================================== */
+   ===================================================== */
 
 .tree-submenu {
     list-style: none;
 
     margin: 0;
-    padding: 0;
+    padding: 5px 0;
 
-    background: #24466f;
+    background: #172033;
 }
-
-
-/* Submenu item */
 
 .tree-submenu li {
     list-style: none;
-
     margin: 0;
     padding: 0;
 }
 
-
-/* Submenu links */
-
 .tree-submenu a {
     display: block;
-
     width: 100%;
 
-    padding: 13px 20px 13px 35px;
+    padding: 11px 20px 11px 38px;
 
-    color: white;
+    color: #94a3b8;
 
     text-decoration: none;
 
-    font-size: 14px;
+    font-size: 13px;
 
     line-height: 1.5;
+
+    transition: all 0.2s ease;
 }
-
-
-/* Submenu hover */
 
 .tree-submenu a:hover {
-    background: #3f73aa;
+    background: #263548;
+    color: white;
 }
-
-
-/* Submenu active */
 
 .tree-submenu a.active {
-    background: #4a82bc;
+    background: #1d4ed8;
 
-    font-weight: bold;
+    color: white;
 
-    border-left: 4px solid white;
+    font-weight: 600;
 
-    padding-left: 31px;
+    border-left: 4px solid #60a5fa;
+
+    padding-left: 34px;
 }
 
-
 /* =====================================================
-   CONTENT
-===================================================== */
+   MAIN CONTENT
+   ===================================================== */
 
 .content {
     flex: 1;
-
     min-width: 0;
 
-    padding: 35px 40px;
+    padding: 35px 45px;
+
+    max-width: 1500px;
 }
 
+/* =====================================================
+   PAGE TITLE
+   ===================================================== */
 
 .content > h2 {
     margin-top: 0;
+    margin-bottom: 28px;
 
-    margin-bottom: 25px;
+    font-size: 30px;
 
-    font-size: 28px;
+    color: #0f172a;
 
-    color: #173a61;
+    font-weight: 700;
 }
 
+.content > h2::after {
+    content: "";
+
+    display: block;
+
+    width: 55px;
+    height: 4px;
+
+    background: #2563eb;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+}
 
 /* =====================================================
    CARDS
-===================================================== */
+   ===================================================== */
 
 .card {
     background: white;
 
-    border: 1px solid #d8dee5;
+    border: 1px solid #e2e8f0;
 
-    border-radius: 7px;
+    border-radius: 12px;
 
-    padding: 24px;
+    padding: 28px;
 
     margin-bottom: 25px;
 
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.06);
+
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
 }
 
+.card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.09);
+}
 
 .card h2 {
     margin-top: 0;
-
-    color: #173a61;
+    color: #0f172a;
+    font-size: 22px;
 }
 
-
 .card h3 {
-    color: #173a61;
-
+    color: #1e40af;
     margin-top: 20px;
 }
 
+/* =====================================================
+   FORM ELEMENTS
+   ===================================================== */
+
+form {
+    width: 100%;
+}
+
+label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #334155;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #1e293b;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: border 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
 
 /* =====================================================
-   RESULT CARD
-===================================================== */
+   BUTTONS
+   ===================================================== */
+
+button,
+input[type="submit"] {
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 12px 22px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.25);
+}
+
+button:active,
+input[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* =====================================================
+   PREDICTION RESULT
+   ===================================================== */
 
 .result-card {
     background: white;
 
-    border: 1px solid #d8dee5;
+    border: 1px solid #dbeafe;
 
-    border-radius: 7px;
+    border-radius: 12px;
 
-    padding: 24px;
+    padding: 28px;
 
-    margin-top: 20px;
+    margin-top: 25px;
 
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 5px 18px rgba(37, 99, 235, 0.08);
 }
-
 
 .result-card h3 {
-    color: #173a61;
+    color: #1e40af;
+
+    margin-top: 0;
+
+    font-size: 21px;
 }
 
+.prediction-result {
+    padding: 20px;
+
+    margin-top: 15px;
+
+    background: #eff6ff;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 10px;
+
+    color: #1e3a8a;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    text-align: center;
+}
+
+/* =====================================================
+   SUCCESS
+   ===================================================== */
+
+.success {
+    background: #ecfdf5;
+
+    border: 1px solid #a7f3d0;
+
+    color: #047857;
+
+    padding: 15px 18px;
+
+    border-radius: 8px;
+
+    margin-bottom: 25px;
+
+    font-weight: 500;
+}
+
+/* =====================================================
+   ERROR
+   ===================================================== */
+
+.error {
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    padding: 15px 18px;
+
+    border-radius: 8px;
+
+    margin-bottom: 25px;
+
+    font-weight: 500;
+}
 
 /* =====================================================
    TABLES
-===================================================== */
+   ===================================================== */
 
 table {
     border-collapse: collapse;
@@ -411,36 +535,40 @@ table {
     width: 100%;
 
     background: white;
-}
 
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+}
 
 th,
 td {
-    border: 1px solid #d2d8de;
+    border-bottom: 1px solid #e2e8f0;
 
-    padding: 12px 14px;
+    padding: 13px 15px;
 
     text-align: left;
 
-    font-size: 15px;
+    font-size: 14px;
 }
 
-
 th {
-    background: #edf1f5;
+    background: #f1f5f9;
+
+    color: #334155;
 
     font-weight: 700;
 }
-
 
 tr:hover td {
     background: #f8fafc;
 }
 
-
 /* =====================================================
    TABLE WRAPPER
-===================================================== */
+   ===================================================== */
 
 .table-wrapper {
     width: 100%;
@@ -448,12 +576,13 @@ tr:hover td {
     overflow-x: auto;
 
     margin-bottom: 25px;
-}
 
+    border-radius: 10px;
+}
 
 /* =====================================================
    SUMMARY TABLE
-===================================================== */
+   ===================================================== */
 
 .summary-table {
     width: 100%;
@@ -461,50 +590,93 @@ tr:hover td {
     margin-bottom: 25px;
 }
 
+/* =====================================================
+   DASHBOARD STAT CARDS
+   ===================================================== */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.stat-card h4 {
+    margin: 0 0 10px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+.stat-card .value {
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #1d4ed8;
+}
 
 /* =====================================================
    CHART GRID
-===================================================== */
+   ===================================================== */
 
 .charts-grid {
     display: grid;
 
-    grid-template-columns: repeat(
-        auto-fit,
-        minmax(400px, 1fr)
-    );
+    grid-template-columns:
+        repeat(auto-fit, minmax(400px, 1fr));
 
     gap: 25px;
 
     width: 100%;
 }
 
-
 /* =====================================================
    CHART CARD
-===================================================== */
+   ===================================================== */
 
 .chart-card {
-    border: 1px solid #d8dee5;
+    border: 1px solid #e2e8f0;
 
     background: #ffffff;
 
-    border-radius: 6px;
+    border-radius: 12px;
 
-    padding: 18px;
+    padding: 20px;
+
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
 }
-
 
 .chart-card h4 {
     margin-top: 0;
 
     margin-bottom: 15px;
 
-    color: #173a61;
+    color: #0f172a;
 
     font-size: 18px;
 }
-
 
 .chart-card img {
     display: block;
@@ -514,50 +686,13 @@ tr:hover td {
     height: auto;
 
     max-width: 100%;
-}
-
-
-/* =====================================================
-   ERROR
-===================================================== */
-
-.error {
-    background: #fff0f0;
-
-    border: 1px solid #e3a3a3;
-
-    color: #b42318;
-
-    padding: 15px 18px;
 
     border-radius: 6px;
-
-    margin-bottom: 25px;
 }
-
-
-/* =====================================================
-   SUCCESS
-===================================================== */
-
-.success {
-    background: #eefaf0;
-
-    border: 1px solid #a9d6b0;
-
-    color: #207227;
-
-    padding: 15px 18px;
-
-    border-radius: 6px;
-
-    margin-bottom: 25px;
-}
-
 
 /* =====================================================
    LISTS
-===================================================== */
+   ===================================================== */
 
 .content ul {
     margin-top: 10px;
@@ -565,52 +700,46 @@ tr:hover td {
     padding-left: 25px;
 }
 
-
 .content li {
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 }
-
 
 /* =====================================================
    PAGE CONTAINER
-   Used by older model pages
-===================================================== */
+   ===================================================== */
 
 .page-container {
-    padding: 35px 40px;
+    padding: 35px 45px;
 }
-
 
 .page-container h2 {
     margin-top: 0;
 
-    color: #173a61;
+    color: #0f172a;
 
-    font-size: 28px;
+    font-size: 30px;
 }
-
 
 /* =====================================================
    HORIZONTAL RULE
-===================================================== */
+   ===================================================== */
 
 hr {
     border: 0;
 
-    border-top: 1px solid #d8dee5;
+    border-top: 1px solid #e2e8f0;
 
-    margin: 25px 0;
+    margin: 28px 0;
 }
-
 
 /* =====================================================
    RESPONSIVE
-===================================================== */
+   ===================================================== */
 
 @media (max-width: 900px) {
 
     .sidebar {
-        width: 180px;
+        width: 190px;
     }
 
     .content {
@@ -626,6 +755,9 @@ hr {
     }
 }
 
+/* =====================================================
+   MOBILE
+   ===================================================== */
 
 @media (max-width: 650px) {
 
@@ -636,7 +768,7 @@ hr {
     }
 
     .topbar h1 {
-        font-size: 21px;
+        font-size: 20px;
     }
 
     .layout {
@@ -652,22 +784,38 @@ hr {
     .sidebar a,
     .sidebar .menu-item,
     .tree-menu summary {
-        padding: 15px 12px;
-
-        font-size: 14px;
-    }
-
-    .tree-submenu a {
-        padding: 12px 10px 12px 25px;
+        padding: 13px 12px;
 
         font-size: 13px;
     }
 
+    .tree-submenu a {
+        padding: 11px 10px 11px 25px;
+
+        font-size: 12px;
+    }
+
     .content {
-        padding: 20px;
+        padding: 20px 15px;
     }
 
     .page-container {
+        padding: 20px 15px;
+    }
+
+    .content > h2 {
+        font-size: 24px;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
         padding: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
     }
 }

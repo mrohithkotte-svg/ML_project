@@ -23,6 +23,7 @@
             color: #172b4d;
         }
 
+
         /* ==============================================
            TOP BAR
         ============================================== */
@@ -526,6 +527,20 @@
         </li>
 
 
+        <!-- K-MEANS -->
+
+        <li>
+
+            <a
+                href="{{ url_for('kmeans') }}"
+                class="{% if request.path == '/kmeans' %}active{% endif %}"
+            >
+                K-Means Clustering
+            </a>
+
+        </li>
+
+
         <li>
 
             <a class="disabled">
@@ -539,6 +554,8 @@
     </ul>
 
 </nav>
+
+
 <!-- =====================================================
      MAIN CONTENT
 ===================================================== -->
@@ -635,6 +652,7 @@
 
             </thead>
 
+
             <tbody>
 
                 {% for item in eda.missing_values %}
@@ -697,6 +715,7 @@
                 </tr>
 
             </thead>
+
 
             <tbody>
 

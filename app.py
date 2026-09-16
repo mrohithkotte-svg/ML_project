@@ -1,15 +1,20 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from load_data import get_data_summary
 from placement_eda import run_eda
 from preprocessing import run_preprocessing
 from linear_regression import run_linear_regression
 from Logistic_Regression import run_logistic_regression
-
 from decision_tree import run_decision_tree
 from random_forest import run_random_forest
 from bagging import run_bagging
 from boosting import run_boosting
+
+from kmeans import (
+    run_manual_k,
+    run_elbow_method,
+    run_silhouette_method
+)
 
 
 # =========================================================
@@ -284,6 +289,75 @@ def boosting():
             result=None,
             error=str(e)
         )
+
+
+# =========================================================
+# K-MEANS CLUSTERING
+# =========================================================
+
+@app.route("/kmeans", methods=["GET", "POST"])
+def kmeans():
+
+    result = None
+    error = None
+
+    method = "manual"
+    manual_k = 3
+
+    if request.method == "POST":
+
+        method = request.form.get(
+            "method",
+            "manual"
+        )
+
+        try:
+
+            # ---------------------------------------------
+            # MANUAL K
+            # ---------------------------------------------
+
+            if method == "manual":
+
+                manual_k = int(
+                    request.form.get(
+                        "k",
+                        3
+                    )
+                )
+
+                result = run_manual_k(
+                    manual_k
+                )
+
+            # ---------------------------------------------
+            # ELBOW METHOD
+            # ---------------------------------------------
+
+            elif method == "elbow":
+
+                result = run_elbow_method()
+
+            # ---------------------------------------------
+            # SILHOUETTE METHOD
+            # ---------------------------------------------
+
+            elif method == "silhouette":
+
+                result = run_silhouette_method()
+
+        except Exception as e:
+
+            error = str(e)
+
+    return render_template(
+        "kmeans.html",
+        active="kmeans",
+        result=result,
+        error=error,
+        method=method,
+        manual_k=manual_k
+    )
 
 
 # =========================================================

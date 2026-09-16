@@ -130,6 +130,7 @@
                             </a>
                         </li>
 
+
                         <li>
                             <a
                                 href="/random-forest"
@@ -139,6 +140,7 @@
                             </a>
                         </li>
 
+
                         <li>
                             <a
                                 href="/bagging"
@@ -147,6 +149,7 @@
                                 Bagging
                             </a>
                         </li>
+
 
                         <li>
                             <a
@@ -160,6 +163,20 @@
                     </ul>
 
                 </details>
+
+            </li>
+
+
+            <!-- K-MEANS -->
+
+            <li>
+
+                <a
+                    href="{{ url_for('kmeans') }}"
+                    class="menu-item {% if request.path == '/kmeans' %}active{% endif %}"
+                >
+                    K-Means Clustering
+                </a>
 
             </li>
 
@@ -221,6 +238,7 @@
                 Dataset Information
             </h2>
 
+
             <table>
 
                 <tr>
@@ -268,6 +286,7 @@
                 Numerical Features
             </h3>
 
+
             {% if preprocessing.numeric_features %}
 
             <ul>
@@ -294,6 +313,7 @@
             <h3>
                 Categorical Features
             </h3>
+
 
             {% if preprocessing.categorical_features %}
 
@@ -326,6 +346,7 @@
                 Target Variable
             </h2>
 
+
             <table>
 
                 <tr>
@@ -350,6 +371,7 @@
             <h2>
                 Train-Test Split
             </h2>
+
 
             <table>
 
@@ -387,6 +409,7 @@
             <h2>
                 After Encoding and Scaling
             </h2>
+
 
             <table>
 

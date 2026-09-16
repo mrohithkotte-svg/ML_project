@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Placement Prediction Project</title>
+    <title>K-Means Clustering</title>
 
     <link
         rel="stylesheet"
@@ -229,23 +229,122 @@
     <main class="content">
 
 
-        {% if active == "none" %}
+        <h2>
+            K-Means Clustering
+        </h2>
 
-            <h2>
-                Welcome
-            </h2>
 
-            <p>
-                Select a module from the left panel
-                to get started.
-            </p>
+        <p>
+            K-Means is an unsupervised machine learning algorithm
+            used to group students into clusters based on their
+            selected features.
+        </p>
 
-        {% endif %}
 
+
+        <!-- =================================================
+             METHOD SELECTION
+        ================================================== -->
+
+        <div class="result-card">
+
+            <h3>
+                Select K Selection Method
+            </h3>
+
+
+            <form method="POST">
+
+
+                <p>
+
+                    <label for="method">
+                        Method:
+                    </label>
+
+
+                    <select
+                        name="method"
+                        id="method"
+                        onchange="showManualInput()"
+                    >
+
+                        <option
+                            value="manual"
+                            {% if method == "manual" %}selected{% endif %}
+                        >
+                            Manual K
+                        </option>
+
+
+                        <option
+                            value="elbow"
+                            {% if method == "elbow" %}selected{% endif %}
+                        >
+                            Elbow Method
+                        </option>
+
+
+                        <option
+                            value="silhouette"
+                            {% if method == "silhouette" %}selected{% endif %}
+                        >
+                            Silhouette Method
+                        </option>
+
+                    </select>
+
+                </p>
+
+
+
+                <!-- MANUAL K -->
+
+                <div id="manualBox">
+
+                    <p>
+
+                        <label for="k">
+                            Enter K:
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="k"
+                            id="k"
+                            value="{{ manual_k }}"
+                            min="2"
+                            max="20"
+                        >
+
+                    </p>
+
+                </div>
+
+
+                <button type="submit">
+                    Run K-Means
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ERROR
+        ================================================== -->
 
         {% if error %}
 
             <div class="error">
+
+                <strong>
+                    Error:
+                </strong>
 
                 {{ error }}
 
@@ -254,168 +353,212 @@
         {% endif %}
 
 
-        {% if active == "data-loading" %}
 
-            <h2>
-                Data Loading
-            </h2>
+        <!-- =================================================
+             RESULTS
+        ================================================== -->
 
+        {% if result %}
 
-            {% if summary %}
-
-                <h3>
-                    Dataset Information
-                </h3>
-
-
-                <table class="summary-table">
-
-                    <tr>
-
-                        <td>
-                            Rows
-                        </td>
-
-                        <td>
-                            {{ summary.n_rows }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            Columns
-                        </td>
-
-                        <td>
-                            {{ summary.n_cols }}
-                        </td>
-
-                    </tr>
-
-                </table>
-
+            <div class="result-card">
 
                 <h3>
-                    Column Information
+                    K-Means Results
                 </h3>
 
-
-                <div class="table-wrapper">
-
-                    <table class="data-table">
-
-                        <thead>
-
-                            <tr>
-
-                                <th>
-                                    Column
-                                </th>
-
-                                <th>
-                                    Data Type
-                                </th>
-
-                                <th>
-                                    Missing Values
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody>
-
-                            {% for column in summary.columns %}
-
-                            <tr>
-
-                                <td>
-                                    {{ column }}
-                                </td>
-
-                                <td>
-                                    {{ summary.dtypes[column] }}
-                                </td>
-
-                                <td>
-                                    {{ summary.missing_counts[column] }}
-                                </td>
-
-                            </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-
-                <h3>
-                    Dataset Preview
-                </h3>
-
-
-                <div class="table-wrapper">
-
-                    <table class="data-table">
-
-                        <thead>
-
-                            <tr>
-
-                                {% for column in summary.columns %}
-
-                                <th>
-                                    {{ column }}
-                                </th>
-
-                                {% endfor %}
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody>
-
-                            {% for row in summary.preview %}
-
-                            <tr>
-
-                                {% for column in summary.columns %}
-
-                                <td>
-                                    {{ row[column] }}
-                                </td>
-
-                                {% endfor %}
-
-                            </tr>
-
-                            {% endfor %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-
-            {% else %}
 
                 <p>
-                    Dataset could not be loaded.
+
+                    <strong>
+                        Method:
+                    </strong>
+
+                    {{ result.method }}
+
                 </p>
+
+
+                <p>
+
+                    <strong>
+                        Selected K:
+                    </strong>
+
+                    {{ result.k }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Silhouette Score:
+                    </strong>
+
+                    {{ result.silhouette_score }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>
+                        Inertia:
+                    </strong>
+
+                    {{ result.inertia }}
+
+                </p>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 CHART
+            ============================================== -->
+
+            {% if result.chart %}
+
+                <div class="result-card">
+
+                    <h3>
+                        Method Visualization
+                    </h3>
+
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='charts/' + result.chart
+                        ) }}"
+                        alt="K-Means Method Chart"
+                        style="max-width: 800px; width: 100%;"
+                    >
+
+                </div>
 
             {% endif %}
 
+
+
+            <!-- =============================================
+                 CLUSTER DISTRIBUTION
+            ============================================== -->
+
+            <div class="result-card">
+
+                <h3>
+                    Cluster Distribution
+                </h3>
+
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Cluster
+                                </th>
+
+                                <th>
+                                    Number of Students
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for cluster, count in result.cluster_counts.items() %}
+
+                            <tr>
+
+                                <td>
+                                    Cluster {{ cluster }}
+                                </td>
+
+                                <td>
+                                    {{ count }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 CLUSTERED DATA
+            ============================================== -->
+
+            <div class="result-card">
+
+                <h3>
+                    Clustered Data
+                </h3>
+
+
+                <div class="table-wrapper">
+
+                    <table class="data-table">
+
+                        <thead>
+
+                            <tr>
+
+                                {% for column in result.data[0].keys() %}
+
+                                    <th>
+                                        {{ column }}
+                                    </th>
+
+                                {% endfor %}
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        {% for row in result.data %}
+
+                            <tr>
+
+                                {% for value in row.values() %}
+
+                                    <td>
+                                        {{ value }}
+                                    </td>
+
+                                {% endfor %}
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
 
         {% endif %}
 
@@ -423,6 +566,41 @@
     </main>
 
 </div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+function showManualInput() {
+
+    const method =
+        document.getElementById("method").value;
+
+    const manualBox =
+        document.getElementById("manualBox");
+
+
+    if (method === "manual") {
+
+        manualBox.style.display = "block";
+
+    } else {
+
+        manualBox.style.display = "none";
+
+    }
+
+}
+
+
+showManualInput();
+
+</script>
+
 
 </body>
 

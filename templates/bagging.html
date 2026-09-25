@@ -131,16 +131,69 @@
             </li>
 
 
-            <!-- K-MEANS -->
+            <!-- CLUSTERING -->
 
-            <li>
+            <li class="tree-menu">
 
-                <a
-                    href="{{ url_for('kmeans') }}"
-                    class="menu-item {% if request.path == '/kmeans' %}active{% endif %}"
+                <details
+                    {% if request.path in [
+                        '/kmeans',
+                        '/clustering',
+                        '/clustering/kmeans',
+                        '/clustering/hierarchical',
+                        '/clustering/dbscan'
+                    ] %}
+                    open
+                    {% endif %}
                 >
-                    K-Means Clustering
-                </a>
+
+                    <summary>
+                        Clustering
+                    </summary>
+
+
+                    <ul class="tree-submenu">
+
+
+                        <li>
+
+                            <a
+                                href="{{ url_for('clustering_kmeans') }}"
+                                class="{% if request.path in ['/kmeans', '/clustering', '/clustering/kmeans'] %}active{% endif %}"
+                            >
+                                K-Means
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                href="{{ url_for('clustering_hierarchical') }}"
+                                class="{% if request.path == '/clustering/hierarchical' %}active{% endif %}"
+                            >
+                                Hierarchical Clustering
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                href="{{ url_for('clustering_dbscan') }}"
+                                class="{% if request.path == '/clustering/dbscan' %}active{% endif %}"
+                            >
+                                DBSCAN
+                            </a>
+
+                        </li>
+
+
+                    </ul>
+
+                </details>
 
             </li>
 

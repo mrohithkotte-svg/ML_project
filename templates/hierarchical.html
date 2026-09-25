@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical Clustering</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="topbar">
+    <h1>Placement Prediction Project</h1>
+</header>
+
+<div class="layout">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <nav class="sidebar">
+        <ul>
+            <!-- DATA LOADING -->
+            <li>
+                <a href="{{ url_for('data_loading') }}" class="menu-item {% if request.path == '/data-loading' %}active{% endif %}">
+                    Data Loading
+                </a>
+            </li>
+
+            <!-- EDA -->
+            <li>
+                <a href="{{ url_for('eda') }}" class="menu-item {% if request.path == '/eda' %}active{% endif %}">
+                    EDA
+                </a>
+            </li>
+
+            <!-- PREPROCESSING -->
+            <li>
+                <a href="{{ url_for('preprocessing') }}" class="menu-item {% if request.path == '/preprocessing' %}active{% endif %}">
+                    Preprocessing
+                </a>
+            </li>
+
+            <!-- LINEAR REGRESSION -->
+            <li>
+                <a href="{{ url_for('linear_regression') }}" class="menu-item {% if request.path == '/linear-regression' %}active{% endif %}">
+                    Linear Regression
+                </a>
+            </li>
+
+            <!-- LOGISTIC REGRESSION -->
+            <li>
+                <a href="{{ url_for('logistic_regression') }}" class="menu-item {% if request.path == '/logistic-regression' %}active{% endif %}">
+                    Logistic Regression
+                </a>
+            </li>
+
+            <!-- TREE BASED ALGORITHM -->
+            <li class="tree-menu">
+                <details {% if request.path in ['/decision-tree', '/random-forest', '/bagging', '/boosting'] %}open{% endif %}>
+                    <summary>Tree Based Algorithm</summary>
+                    <ul class="tree-submenu">
+                        <li><a href="/decision-tree" class="{% if request.path == '/decision-tree' %}active{% endif %}">Decision Tree</a></li>
+                        <li><a href="/random-forest" class="{% if request.path == '/random-forest' %}active{% endif %}">Random Forest</a></li>
+                        <li><a href="/bagging" class="{% if request.path == '/bagging' %}active{% endif %}">Bagging</a></li>
+                        <li><a href="/boosting" class="{% if request.path == '/boosting' %}active{% endif %}">Boosting</a></li>
+                    </ul>
+                </details>
+            </li>
+
+            <!-- CLUSTERING -->
+            <li class="tree-menu">
+                <details {% if request.path in ['/kmeans', '/clustering', '/clustering/kmeans', '/clustering/hierarchical', '/clustering/dbscan'] %}open{% endif %}>
+                    <summary>Clustering</summary>
+                    <ul class="tree-submenu">
+                        <li>
+                            <a href="{{ url_for('clustering_kmeans') }}" class="{% if request.path in ['/kmeans', '/clustering', '/clustering/kmeans'] %}active{% endif %}">
+                                K-Means
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('clustering_hierarchical') }}" class="{% if request.path == '/clustering/hierarchical' %}active{% endif %}">
+                                Hierarchical Clustering
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('clustering_dbscan') }}" class="{% if request.path == '/clustering/dbscan' %}active{% endif %}">
+                                DBSCAN
+                            </a>
+                        </li>
+                    </ul>
+                </details>
+            </li>
+
+            <!-- PREDICTION -->
+            <li>
+                <span class="menu-item disabled">
+                    Prediction (coming soon)
+                </span>
+            </li>
+        </ul>
+    </nav>
+
+
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
+
+    <main class="content">
+
+        <h2>Hierarchical Clustering</h2>
+
+        <p>
+            Hierarchical (Agglomerative) Clustering builds a nested tree of clusters represented visually by a dendrogram using standard dataset features.
+        </p>
+
+        <!-- =================================================
+             INPUT FORM
+        ================================================== -->
+
+        <div class="result-card">
+            <h3>Select Linkage Method</h3>
+
+            <form method="POST">
+                <p>
+                    <label for="linkage">Linkage Method:</label>
+                    <select name="linkage" id="linkage">
+                        <option value="single" {% if linkage == "single" %}selected{% endif %}>Single</option>
+                        <option value="complete" {% if linkage == "complete" or not linkage %}selected{% endif %}>Complete</option>
+                        <option value="average" {% if linkage == "average" %}selected{% endif %}>Average</option>
+                        <option value="ward" {% if linkage == "ward" %}selected{% endif %}>Ward</option>
+                    </select>
+                </p>
+
+                <button type="submit">Run Hierarchical Clustering</button>
+            </form>
+        </div>
+
+        <!-- =================================================
+             ERROR DISPLAY
+        ================================================== -->
+
+        {% if error %}
+            <div class="error">
+                <strong>Error:</strong> {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- =================================================
+             RESULTS DISPLAY
+        ================================================== -->
+
+        {% if result %}
+            <div class="result-card">
+                <h3>Hierarchical Clustering Result</h3>
+
+                <p><strong>Linkage Method:</strong> {{ result.method }}</p>
+                <p><strong>Distance Metric:</strong> {{ result.distance_metric }}</p>
+                <p><strong>Number of Samples Used:</strong> {{ result.n_samples }}</p>
+                <p><strong>Total Dataset Rows:</strong> {{ result.total_rows }}</p>
+            </div>
+
+            <!-- DENDROGRAM CHART -->
+            {% if result.chart %}
+                <div class="result-card">
+                    <h3>Dendrogram Visualization</h3>
+                    <img src="{{ url_for('static', filename='charts/' + result.chart) }}" alt="Hierarchical Dendrogram" style="max-width: 900px; width: 100%;">
+                </div>
+            {% endif %}
+
+            <!-- SAMPLE DATA PREVIEW -->
+            {% if result.data %}
+                <div class="result-card">
+                    <h3>Sample Data Preview</h3>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    {% for column in result.data[0].keys() %}
+                                        <th>{{ column }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in result.data %}
+                                    <tr>
+                                        {% for value in row.values() %}
+                                            <td>{{ value }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+</html>

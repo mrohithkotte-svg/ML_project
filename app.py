@@ -15,6 +15,9 @@ from kmeans import (
     run_elbow_method,
     run_silhouette_method
 )
+from hierarchical import run_hierarchical_clustering as run_hierarchical
+from dbscan import run_dbscan
+
 
 
 # =========================================================
@@ -292,11 +295,13 @@ def boosting():
 
 
 # =========================================================
-# K-MEANS CLUSTERING
+# CLUSTERING MODULES
 # =========================================================
 
 @app.route("/kmeans", methods=["GET", "POST"])
-def kmeans():
+@app.route("/clustering", methods=["GET", "POST"])
+@app.route("/clustering/kmeans", methods=["GET", "POST"])
+def clustering_kmeans():
 
     result = None
     error = None
@@ -358,6 +363,91 @@ def kmeans():
         method=method,
         manual_k=manual_k
     )
+
+
+# Legacy endpoint alias for url_for('kmeans')
+@app.route("/kmeans_legacy", methods=["GET", "POST"], endpoint="kmeans")
+def kmeans():
+    return clustering_kmeans()
+
+
+@app.route("/clustering/hierarchical", methods=["GET", "POST"])
+def clustering_hierarchical():
+
+    result = None
+    error = None
+    linkage = "complete"
+
+    if request.method == "POST":
+
+        linkage = request.form.get(
+            "linkage",
+            "complete"
+        )
+
+        try:
+
+            result = run_hierarchical(
+                linkage_method=linkage
+            )
+
+        except Exception as e:
+
+            error = str(e)
+
+    return render_template(
+        "hierarchical.html",
+        active="hierarchical",
+        result=result,
+        error=error,
+        linkage=linkage
+    )
+
+
+@app.route("/clustering/dbscan", methods=["GET", "POST"])
+def clustering_dbscan():
+
+    result = None
+    error = None
+    eps = 0.5
+    min_samples = 5
+
+    if request.method == "POST":
+
+        try:
+
+            eps = float(
+                request.form.get(
+                    "eps",
+                    0.5
+                )
+            )
+
+            min_samples = int(
+                request.form.get(
+                    "min_samples",
+                    5
+                )
+            )
+
+            result = run_dbscan(
+                eps=eps,
+                min_samples=min_samples
+            )
+
+        except Exception as e:
+
+            error = str(e)
+
+    return render_template(
+        "dbscan.html",
+        active="dbscan",
+        result=result,
+        error=error,
+        eps=eps,
+        min_samples=min_samples
+    )
+
 
 
 # =========================================================
